@@ -1,31 +1,53 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import SpeakingComponent from "./Speaking";
 import Socket from "./Socket";
 import ListeningComponent from "./Listening";
 
-// HARD CODED ROOM ID AND USERNAME
 const ROOMID = "parliament";
 const USERNAME = "mantri";
 
 function Language() {
   const [audioText, setAudioText] = useState([]);
-  // socket connection
-  const socket = new Socket();
-  socket.joinRoom(USERNAME, ROOMID);
-  socket.sendMessage(USERNAME, ROOMID, "Welcome Mantri Ji", "male");
-  socket.on("response", (data) => {
-    const { username, gender, translated } = data;
-    setAudioText((prevText) => [...prevText, { username, gender, translated }]);
-  });
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  const socketRef = useRef(null); // useRef to keep the socket instance persistent
 
-  scrollToTop();
+  useEffect(() => {
+    // Initialize the socket only if it's not already established
+    if (!socketRef.current) {
+      socketRef.current = new Socket();
+      socketRef.current.joinRoom(USERNAME, ROOMID);
+    }
+
+    // Set up socket response listener
+    socketRef.current.on("response", (data) => {
+      const { username, gender, translated } = data;
+      setAudioText((prevText) => [
+        ...prevText,
+        { username, gender, translated },
+      ]);
+    });
+
+    // Scroll to top on initial render
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    // Clean up the socket when the component unmounts
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.socket.disconnect();
+        socketRef.current = null;
+      }
+    };
+  }, []);
 
   const onSpeakingText = (textData) => {
-    socket.sendMessage(USERNAME, ROOMID, "Mantri Ji:", "male", textData);
+    if (socketRef.current) {
+      socketRef.current.sendMessage(
+        USERNAME,
+        ROOMID,
+        textData,
+        "male",
+        textData
+      );
+    }
   };
 
   return (

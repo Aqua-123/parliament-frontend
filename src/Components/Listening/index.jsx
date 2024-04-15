@@ -8,14 +8,25 @@ function ListeningComponent({ texts }) {
 
   useEffect(() => {
     const convertTextsToSpeech = async () => {
-      const audioTextPromises = texts.map(async (text) => {
+      const textsWithTranslations = texts.filter(
+        (text) => text.translated && text.translated[selectedLanguage]
+      );
+
+      const textsToConvert = textsWithTranslations.filter(
+        (text) => !audioText.some((audio) => audio.text === text.translated)
+      );
+      const audioTextPromises = textsToConvert.map(async (text) => {
         try {
           const audio = await TextToSpeech(
-            text.text,
+            text.translated[selectedLanguage],
             selectedLanguage,
             text.gender
           );
-          return { text: text.text, audio };
+
+          const audioDiv = new Audio(audio);
+          audioDiv.play();
+
+          return { text: text.text, audio, speaker: text.username };
         } catch (error) {
           console.error("Error converting text to speech:", error);
           return null;
@@ -31,7 +42,7 @@ function ListeningComponent({ texts }) {
     if (texts.length > 0) {
       convertTextsToSpeech();
     }
-  }, [texts, selectedLanguage, setAudioText]);
+  }, [texts, selectedLanguage, setAudioText, audioText]);
 
   return (
     <>
