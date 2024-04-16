@@ -1,65 +1,73 @@
 import React, { useState, useEffect, useRef } from "react";
-import SpeakingComponent from "./Speaking";
 import Socket from "./Socket";
-import ListeningComponent from "./Listening";
+import TranscriptTile from "./TranscriptTile";
+import PushToSpeak from "./PushToSpeak";
+import "./LanguagePage.css";
 
 const ROOMID = "parliament";
 const USERNAME = "mantri";
 
+const transcriptData = [
+  {
+    time: "00:01",
+    speaker: "Speaker 1",
+    text: "Hello, welcome to our presentation.",
+  },
+  { time: "00:05", speaker: "Speaker 2", text: "Thank you, happy to be here." },
+  { time: "00:05", speaker: "Speaker 2", text: "Thank you, happy to be here." },
+  { time: "00:05", speaker: "Speaker 2", text: "Thank you, happy to be here." },
+  { time: "00:05", speaker: "Speaker 2", text: "Thank you, happy to be here." },
+  { time: "00:05", speaker: "Speaker 2", text: "Thank you, happy to be here." },
+  { time: "00:05", speaker: "Speaker 2", text: "Thank you, happy to be here." },
+  { time: "00:05", speaker: "Speaker 2", text: "Thank you, happy to be here." },
+  { time: "00:05", speaker: "Speaker 2", text: "Thank you, happy to be here." },
+  { time: "00:05", speaker: "Speaker 2", text: "Thank you, happy to be here." },
+  { time: "00:05", speaker: "Speaker 2", text: "Thank you, happy to be here." },
+  { time: "00:05", speaker: "Speaker 2", text: "Thank you, happy to be here." },
+  { time: "00:05", speaker: "Speaker 2", text: "Thank you, happy to be here." },
+  { time: "00:05", speaker: "Speaker 2", text: "Thank you, happy to be here." },
+  { time: "00:05", speaker: "Speaker 2", text: "Thank you, happy to be here." },
+  { time: "00:05", speaker: "Speaker 2", text: "Thank you, happy to be here." },
+  { time: "00:05", speaker: "Speaker 2", text: "Thank you, happy to be here." },
+  { time: "00:05", speaker: "Speaker 2", text: "Thank you, happy to be here." },
+  { time: "00:05", speaker: "Speaker 2", text: "Thank you, happy to be here." },
+  { time: "00:05", speaker: "Speaker 2", text: "Thank you, happy to be here." },
+];
+
 function Language() {
-  const [audioText, setAudioText] = useState([]);
-  const socketRef = useRef(null); // useRef to keep the socket instance persistent
-
-  useEffect(() => {
-    // Initialize the socket only if it's not already established
-    if (!socketRef.current) {
-      socketRef.current = new Socket();
-      socketRef.current.joinRoom(USERNAME, ROOMID);
-    }
-
-    // Set up socket response listener
-    socketRef.current.on("response", (data) => {
-      const { username, gender, translated } = data;
-      setAudioText((prevText) => [
-        ...prevText,
-        { username, gender, translated },
-      ]);
-    });
-
-    // Scroll to top on initial render
-    window.scrollTo({ top: 0, behavior: "smooth" });
-
-    // Clean up the socket when the component unmounts
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.socket.disconnect();
-        socketRef.current = null;
-      }
-    };
-  }, []);
-
-  const onSpeakingText = (textData) => {
-    if (socketRef.current) {
-      socketRef.current.sendMessage(
-        USERNAME,
-        ROOMID,
-        textData,
-        "male",
-        textData
-      );
-    }
+  const handlePermission = () => {
+    console.log("Permission requested");
   };
 
   return (
     <>
       <section className="sessionListSec languageSec">
         <div className="container">
-          <h2 className="listHdng">Welcome Mantri Ji</h2>
+          <h3 className="sessionHdng">2021 - Parliament - 12th July</h3>
+
           <div className="sessionListdiv">
-            <form action="">
-              <ListeningComponent texts={audioText} />
-              <SpeakingComponent onAudioText={onSpeakingText} />
-            </form>
+            <TranscriptTile data={transcriptData} />
+            <br />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "10px",
+              }}
+            >
+              <PushToSpeak
+                onSpeakingText={(text) => console.log("Speaking text:", text)}
+              />
+              <br />
+              <button
+                onClick={handlePermission}
+                className="take-permission-button"
+              >
+                Take Permission
+              </button>
+            </div>
           </div>
         </div>
       </section>

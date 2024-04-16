@@ -1,0 +1,22 @@
+.sessionHdng {
+  font-family: "Segoe UI", sans-serif; /* Modern, clean font */
+  color: #284b63; /* Deep blue for a professional yet modern look */
+  font-size: 24px; /* Slightly larger font size */
+  font-weight: 600; /* Medium font weight for better readability */
+  text-align: center; /* Centers the heading */
+  margin: 20px 0; /* Top and bottom margin for better spacing */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+.take-permission-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff; /* Blue color */
+  color: white; /* White text */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.take-permission-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
