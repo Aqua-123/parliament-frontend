@@ -1,0 +1,44 @@
+.sessionListDiv {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: stretch;
+}
+
+.sessionCard {
+  flex: 0 0 45%; /* Make cards take nearly half of the container width to fit 2 in a row */
+  margin: 20px 2.5%; /* Ensure some space around the cards */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  border: none; /* Optional: remove border if you prefer borderless cards */
+  background-color: #f8f9fa; /* Light background for the card */
+}
+
+@media (max-width: 768px) {
+  .sessionCard {
+    flex: 0 0 90%; /* On smaller screens, make each card take almost the full width */
+    margin: 20px 5%; /* Adjust margin to keep the layout neat */
+  }
+}
+
+/* Additional Styling for Color and Typography */
+.sessionCard .card-body {
+  background-color: #ffffff; /* Bright white background for the content */
+  /* border-top: 5px solid #007bff; Blue top border for a touch of color */
+}
+
+.sessionCard .card-title {
+  color: #007bff; /* Match the title color with the border */
+}
+
+.srchBtn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.srchBtn:hover {
+  background-color: #0056b3; /* Darken the button on hover */
+}

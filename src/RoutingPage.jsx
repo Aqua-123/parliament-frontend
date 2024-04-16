@@ -17,7 +17,7 @@ function RoutingPage() {
             <Route index element={<HomePage />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
-            <Route path="listpage" element={<List />} />
+            <Route path="dashboard" element={<List />} />
             <Route path="language" element={<Language />} />
           </Route>
         </Routes>
